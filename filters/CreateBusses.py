@@ -208,7 +208,7 @@ class BusCreator:
 			for y in xrange(self.box.miny, self.box.maxy):
 				for z in xrange(self.box.minz, self.box.maxz):
 					(color, start) = self.isTerminal((x, y, z))
-					if color != None and start != None:
+					if color is not None and start is not None:
 						if start:
 							if color in self.starts:
 								raise Exception("Duplicate starting point for " + Colors[color] + " bus")
@@ -300,7 +300,7 @@ class BusCreator:
 		prevGuide = None
 		self.power = 1
 		for guide in self.path[color]:
-			if prevGuide != None:
+			if prevGuide is not None:
 				self.createConnection(prevGuide, guide, color)
 			
 			prevGuide = guide

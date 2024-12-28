@@ -11,21 +11,23 @@ ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
 WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE."""
-from OpenGL import GL
+import logging
+
 import numpy
-from albow import TableView, TableColumn, Label, Button, Column, CheckBox, AttrRef, Row, ask, alert
+from OpenGL import GL
+
 import config
+import pymclevel
+from albow import TableView, TableColumn, Label, Button, Column, CheckBox, AttrRef, Row, ask, alert
 from editortools.editortool import EditorTool
 from editortools.tooloptions import ToolOptions
 from glbackground import Panel
 from glutils import DisplayList
 from mceutils import loadPNGTexture, alertException, drawTerrainCuttingWire, drawCube
 from operation import Operation
-import pymclevel
 from pymclevel.box import BoundingBox, FloatBox
-import logging
-log = logging.getLogger(__name__)
 
+log = logging.getLogger(__name__)
 
 
 class PlayerMoveOperation(Operation):
@@ -102,7 +104,8 @@ class PlayerSpawnMoveOperation(Operation):
         if isinstance(level, pymclevel.MCInfdevOldLevel):
             if not positionValid(level, self.pos):
                 if SpawnSettings.spawnProtection.get():
-                    raise SpawnPositionInvalid("You cannot have two air blocks at Y=63 and Y=64 in your spawn point's column. Additionally, you cannot have a solid block in the three blocks above your spawn point. It's weird, I know.")
+                    raise SpawnPositionInvalid(
+                        "You cannot have two air blocks at Y=63 and Y=64 in your spawn point's column. Additionally, you cannot have a solid block in the three blocks above your spawn point. It's weird, I know.")
 
         self.undoPos = level.playerSpawnPosition()
         level.setPlayerSpawnPosition(self.pos)
@@ -289,7 +292,7 @@ class PlayerPositionTool(EditorTool):
 
         x, y, z = pos
 
-        #x,y,z=map(lambda p,d: p+d, pos, direction)
+        # x,y,z=map(lambda p,d: p+d, pos, direction)
         GL.glEnable(GL.GL_BLEND)
         GL.glColor(1.0, 1.0, 1.0, 0.5)
         self.drawCharacterHead(x + 0.5, y + 0.75, z + 0.5)
@@ -299,7 +302,7 @@ class PlayerPositionTool(EditorTool):
         self.drawCharacterHead(x + 0.5, y + 0.75, z + 0.5)
         drawTerrainCuttingWire(BoundingBox((x, y, z), (1, 1, 1)))
         drawTerrainCuttingWire(BoundingBox((x, y - 1, z), (1, 1, 1)))
-        #drawTerrainCuttingWire( BoundingBox((x,y-2,z), (1,1,1)) )
+        # drawTerrainCuttingWire( BoundingBox((x,y-2,z), (1,1,1)) )
         GL.glDisable(GL.GL_DEPTH_TEST)
 
     markerLevel = None
@@ -331,13 +334,13 @@ class PlayerPositionTool(EditorTool):
                 GL.glColor(1, 1, 1, 1)
                 self.drawCharacterHead(0, 0, 0)
                 GL.glPopMatrix()
-                #GL.glEnable(GL.GL_BLEND)
+                # GL.glEnable(GL.GL_BLEND)
                 drawTerrainCuttingWire(FloatBox((x - .5, y - .5, z - .5), (1, 1, 1)),
                                        c0=(0.3, 0.9, 0.7, 1.0),
                                        c1=(0, 0, 0, 0),
                                        )
 
-                #GL.glDisable(GL.GL_BLEND)
+                # GL.glDisable(GL.GL_BLEND)
 
             except Exception, e:
                 print repr(e)
@@ -408,6 +411,7 @@ class PlayerSpawnPositionOptions(ToolOptions):
 
         self.add(col)
         self.shrink_wrap()
+
 
 SpawnSettings = config.Settings("Spawn")
 SpawnSettings.spawnProtection = SpawnSettings("Spawn Protection", True)
@@ -485,12 +489,15 @@ class PlayerSpawnPositionTool(PlayerPositionTool):
 
         pixelScale = 0.5 if self.editor.level.materials.name in ("Pocket", "Alpha") else 1.0
         texSize = 16 * pixelScale
-        cageTexVerts *= pixelScale
+        cageTexVerts = (cageTexVerts * pixelScale)
 
-        cageTexVerts = numpy.array([((tx, ty), (tx + texSize, ty), (tx + texSize, ty + texSize), (tx, ty + texSize)) for (tx, ty) in cageTexVerts], dtype='float32')
+        cageTexVerts = numpy.array(
+            [((tx, ty), (tx + texSize, ty), (tx + texSize, ty + texSize), (tx, ty + texSize)) for (tx, ty) in
+             cageTexVerts], dtype='float32')
         GL.glEnable(GL.GL_ALPHA_TEST)
 
-        drawCube(BoundingBox((x, y, z), (1, 1, 1)), texture=pymclevel.alphaMaterials.terrainTexture, textureVertices=cageTexVerts)
+        drawCube(BoundingBox((x, y, z), (1, 1, 1)), texture=pymclevel.alphaMaterials.terrainTexture,
+                 textureVertices=cageTexVerts)
         GL.glDisable(GL.GL_ALPHA_TEST)
 
     @alertException

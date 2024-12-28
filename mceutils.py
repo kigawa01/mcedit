@@ -184,7 +184,7 @@ def drawCube(box, cubeType=GL.GL_QUADS, blockType=0, texture=None, textureVertic
         x2, y2, z,
         x2, y2, z2,
                             ), dtype='f4')
-    if textureVertices == None:
+    if textureVertices is None:
         textureVertices = numpy.array(
         (
         0, -dy * 16,
@@ -228,7 +228,7 @@ def drawCube(box, cubeType=GL.GL_QUADS, blockType=0, texture=None, textureVertic
             textureVertices[:] += 0.5
 
     GL.glVertexPointer(3, GL.GL_FLOAT, 0, cubeVertices)
-    if texture != None:
+    if texture is not None:
         GL.glEnable(GL.GL_TEXTURE_2D)
         GL.glEnableClientState(GL.GL_TEXTURE_COORD_ARRAY)
 
@@ -242,7 +242,7 @@ def drawCube(box, cubeType=GL.GL_QUADS, blockType=0, texture=None, textureVertic
     GL.glDisable(GL.GL_POLYGON_OFFSET_FILL)
     GL.glDisable(GL.GL_POLYGON_OFFSET_LINE)
 
-    if texture != None:
+    if texture is not None:
         GL.glDisableClientState(GL.GL_TEXTURE_COORD_ARRAY)
         GL.glDisable(GL.GL_TEXTURE_2D)
 

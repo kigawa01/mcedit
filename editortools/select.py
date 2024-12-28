@@ -740,7 +740,7 @@ class SelectionTool(EditorTool):
             GL.glPolygonOffset(DepthOffset.SelectionCorners, DepthOffset.SelectionCorners)
             lineWidth = 3
             for t, c, n in ((self.bottomLeftPoint, self.bottomLeftColor, self.bottomLeftNudge), (self.topRightPoint, self.topRightColor, self.topRightNudge)):
-                if t != None:
+                if t is not None:
                     (sx, sy, sz) = t
                     if self.selectionInProgress:
                         if t == self.getSelectionPoint(self.currentCorner):
@@ -879,7 +879,7 @@ class SelectionTool(EditorTool):
         if self.dragResizeFace is not None:
             self.showPanel()  # xxx do this every frame while dragging because our UI kit is bad
 
-        if ((self.selectionInProgress or self.clickSelectionInProgress) and otherCorner != None):
+        if ((self.selectionInProgress or self.clickSelectionInProgress) and otherCorner is not None):
             GL.glPolygonOffset(DepthOffset.PotentialSelection, DepthOffset.PotentialSelection)
 
             pos, direction = self.editor.blockFaceUnderCursor

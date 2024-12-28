@@ -314,7 +314,7 @@ class RootWidget(Widget):
     def show_tooltip(self, widget, pos):
 
         if hasattr(self, 'currentTooltip'):
-            if self.currentTooltip != None:
+            if self.currentTooltip is not None:
                 self.remove(self.currentTooltip)
 
             self.currentTooltip = None

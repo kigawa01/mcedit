@@ -82,7 +82,7 @@ class FilterModuleOptions(Widget):
         self.add(pages)
         self.shrink_wrap()
         if len(pages.pages):
-            if(pages.current_page != None):
+            if(pages.current_page is not None):
                 pages.show_page(pages.current_page)
             else:
                 pages.show_page(pages.pages[0])

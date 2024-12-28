@@ -688,7 +688,7 @@ class CloneTool(EditorTool):
         if self.level is None:
             return
 
-        if self.destPoint != None:
+        if self.destPoint is not None:
             destPoint = self.destPoint
             if self.draggingFace is not None:
                 # debugDrawPoint()

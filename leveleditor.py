@@ -3609,7 +3609,7 @@ class EditorToolbar(GLOrtho):
             self.parent.currentTool.toolReselected()
         else:
             self.parent.selectionTool.hidePanel()
-            if self.parent.currentTool != None:
+            if self.parent.currentTool is not None:
                 self.parent.currentTool.cancel()
             self.parent.currentTool = t
             self.parent.currentTool.toolSelected()
