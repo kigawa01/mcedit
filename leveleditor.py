@@ -1680,7 +1680,9 @@ class LevelEditor(GLViewport):
                 blocks = numpy.array(chunk.Blocks[slices], dtype='uint16')
                 blocks |= (numpy.array(chunk.Data[slices], dtype='uint16') << 12)
                 b = numpy.bincount(blocks.ravel())
-                types[:b.shape[0]] += b
+                size = b.shape[0]
+                print size
+                types[:size] += numpy.uint32(b)
 
                 for ent in chunk.getEntitiesInBox(box):
                     if ent["id"].value == "Item":
